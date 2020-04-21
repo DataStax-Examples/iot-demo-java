@@ -42,7 +42,7 @@ To create the a single node cluster with replication factor of 1 for standard lo
 
 To create the schema, run the following
 
-	mvn clean compile exec:java -Dexec.mainClass="com.datastax.demo.SchemaSetup" -DcontactPoints=localhost
+	mvn clean compile exec:java -Dexec.mainClass="com.datastax.demo.SchemaSetup" -DcontactPoints=localhost -Dexec.cleanupDaemonThreads=false
 
 * **Insert meter readings**  
 
@@ -50,11 +50,11 @@ To insert some meter readings, run the following
 
 	mvn clean compile exec:java -Dexec.mainClass="com.datastax.smartmeter.Main" -DcontactPoints=localhost
 
-You can use -DnoOfCustomers and -DnoOfDays to change the no of customer readings and the no of days (in the past) to be inserted. Defaults are 100 and 180 respectively.
+You can use `-DnoOfCustomers` and `-DnoOfDays` to change the no of customer readings and the no of days (in the past) to be inserted. Defaults are 100 and 180 respectively.
 
 To view the data using cqlsh, run
 
-	select * from smart_meter_reading where meter_id = 1;
+	select * from datastax_iot_demo.smart_meter_reading where meter_id = 1;
 
 * **Run a  billingCycle**  
 
@@ -62,7 +62,7 @@ To run a billingCycle, which accummulates usages for a specific time period, run
 
 	mvn clean compile exec:java -Dexec.mainClass="com.datastax.smartmeter.BillingCycleProcessor" -DcontactPoints=localhost
 
-To specific billing cycle use -DbillingCycle (Default is 7).
+To specific billing cycle use `-DbillingCycle` (Default is 7).
 
 * **Run a DAY aggregation**
 
@@ -70,11 +70,11 @@ To run a DAY aggregation, which sums the usage for a day, run
 
 	mvn clean compile exec:java -Dexec.mainClass="com.datastax.smartmeter.Aggregate" -DcontactPoints=localhost
 
-You can use -DnoOfCustomers and -DnoOfDays to change the no of customer readings and the no of days (in the past) to be aggregated. Defaults are 100 and 180 respectively.
+You can use `-DnoOfCustomers` and `-DnoOfDays` to change the no of customer readings and the no of days (in the past) to be aggregated. Defaults are 100 and 180 respectively.
 
 To view the data using cqlsh, run
 
-	select * from smart_meter_reading_aggregates where meter_id = 1 and aggregatetype ='DAY';
+	select * from datastax_iot_demo.smart_meter_reading_aggregates where meter_id = 1 and aggregatetype ='DAY';
 
 * **Remove tables and schema**  
 
