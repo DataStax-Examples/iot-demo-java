@@ -1,45 +1,83 @@
-# datastax-example-template
-A short few sentences describing what is the purpose of the example and what the user will learn
+# IoT Cassandra Demo Application  
 
-e.g.
-This application shows how to use configure your NodeJs application to connect to DDAC/Cassandra/DSE or an Apollo database at runtime.
+The explosive number of devices that are generating, tracking, and sharing data across a variety of networks is overwhelming to most data management solutions. Cassandra is a perfect fit for consuming lots of time-series data that comes directly from users, devices, sensors, and similar mechanisms that exist in a variety of geographic locations.
 
-Contributors: A listing of contributors to this repository linked to their github profile
+This is a small demo to show how to insert meter readings for a smart reader. Note: the readings come in through a file with a number of readings per day.
 
 ## Objectives
-A list of the top objectives that are being demonstrated by this sample
 
-e.g.
-* To demonstrate how to specify at runtime between a standard (DSE/DDAC/C*) client configuration and an Apollo configuration for the same application.
-  
+* To demonstrate how Cassandra and Datastax can be used to solve IoT data management issues.
+
 ## Project Layout
-A list of key files within this repo and a short 1-2 sentence description of why they are important to the project
 
-e.g.
-* app.js - The main application file which contains all the logic to switch between the configurations
+* [SchemaSetup.java](/src/main/java/com/datastax/demo/SchemaSetup.java) - Sets up the smart meter reader schema.
+* [Main.java](/src/main/java/com/datastax/smartmeter/Main.java) - Inserts meter reading in table when run.
+* [app.js](/src/main/java/com/datastax/smartmeter/BillingCycleProcessor.java) -  Runs a billingCycle, which accummulates usages for a specific time period
+* [Aggregate.java](/src/main/java/com/datastax/smartmeter/Aggregate.java) - Runs an day aggregation, which sums the usage for a day.
 
 ## How this Works
-A description of how this sample works and how it demonstrates the objectives outlined above
+After setting up the smart reader schema, meter reading are inserted into the table from a generated file with number of readings per day, per customer. A billing cycle can be run to determine accumulated usages for a specific time, period. A sum of the usage for a day may also be obtained.
 
 ## Setup and Running
 
 ### Prerequisites
-The prerequisites required for this application to run
 
-e.g.
-* NodeJs version 8
-* A DSE 6.7 Cluster
-* Schema added to the cluster
+* Java 8
+* A Cassandra, DSE cluster or Astra database
+* Maven to compile and run code
 
 ### Running
-The steps and configuration needed to run and build this application
 
-e.g.
-To run this application use the following command:
+* Setup the schema
 
-`node app.js`
+Note : This will drop the keyspace "datastax_iot_demo" and create a new one. All existing data will be lost.
 
-This will produce the following output:
+To specify contact points use the contactPoints command line parameter e.g.
 
-`Connected to cluster with 3 host(s) ["XX.XX.XX.136:9042","XX.XX.XX.137:9042","XX.XX.XX.138:9042"]`
+	'-DcontactPoints=192.168.25.100,192.168.25.101'
 
+The contact points can take mulitple points in the IP,IP,IP (no spaces).
+
+To create the a single node cluster with replication factor of 1 for standard localhost setup, run the following
+
+To create the schema, run the following
+
+	mvn clean compile exec:java -Dexec.mainClass="com.datastax.demo.SchemaSetup" -DcontactPoints=localhost
+
+* Insert meter readings  
+
+To insert some meter readings, run the following
+
+	mvn clean compile exec:java -Dexec.mainClass="com.datastax.smartmeter.Main" -DcontactPoints=localhost
+
+You can use -DnoOfCustomers and -DnoOfDays to change the no of customer readings and the no of days (in the past) to be inserted. Defaults are 100 and 180 respectively.
+
+To view the data using cqlsh, run
+
+	select * from smart_meter_reading where meter_id = 1;
+
+* Run a  billingCycle  
+
+To run a billingCycle, which accummulates usages for a specific time period, run
+
+	mvn clean compile exec:java -Dexec.mainClass="com.datastax.smartmeter.BillingCycleProcessor" -DcontactPoints=localhost
+
+To specific billing cycle use -DbillingCycle (Default is 7).
+
+* Run a DAY aggregation
+
+To run a DAY aggregation, which sums the usage for a day, run
+
+	mvn clean compile exec:java -Dexec.mainClass="com.datastax.smartmeter.Aggregate" -DcontactPoints=localhost
+
+You can use -DnoOfCustomers and -DnoOfDays to change the no of customer readings and the no of days (in the past) to be aggregated. Defaults are 100 and 180 respectively.
+
+To view the data using cqlsh, run
+
+	select * from smart_meter_reading_aggregates where meter_id = 1 and aggregatetype ='DAY';
+
+Remove tables and schema  
+
+To remove the tables and the schema, run the following.
+
+    mvn clean compile exec:java -Dexec.mainClass="com.datastax.demo.SchemaTeardown" -DcontactPoints=localhost
