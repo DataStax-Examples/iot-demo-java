@@ -4,6 +4,8 @@ There are a large number of devices that are generating, tracking, and sharing d
 
 This is a small demo to show how to insert meter readings for a smart reader. Note: the readings come in through a file with a number of readings per day.
 
+Contributor(s): [Patrick Callaghan](https://github.com/PatrickCallaghan)
+
 ## Objectives
 
 * To demonstrate how Cassandra and Datastax can be used to solve IoT data management issues.
