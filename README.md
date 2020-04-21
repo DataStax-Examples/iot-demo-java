@@ -28,13 +28,13 @@ After setting up the smart reader schema, meter reading are inserted into the ta
 
 ### Running
 
-* Setup the schema
+* **Setup the schema**
 
 Note : This will drop the keyspace "datastax_iot_demo" and create a new one. All existing data will be lost.
 
 To specify contact points use the contactPoints command line parameter e.g.
 
-	'-DcontactPoints=192.168.25.100,192.168.25.101'
+	-DcontactPoints=192.168.25.100,192.168.25.101
 
 The contact points can take mulitple points in the IP,IP,IP (no spaces).
 
@@ -44,7 +44,7 @@ To create the schema, run the following
 
 	mvn clean compile exec:java -Dexec.mainClass="com.datastax.demo.SchemaSetup" -DcontactPoints=localhost
 
-* Insert meter readings  
+* **Insert meter readings**  
 
 To insert some meter readings, run the following
 
@@ -56,7 +56,7 @@ To view the data using cqlsh, run
 
 	select * from smart_meter_reading where meter_id = 1;
 
-* Run a  billingCycle  
+* **Run a  billingCycle**  
 
 To run a billingCycle, which accummulates usages for a specific time period, run
 
@@ -64,7 +64,7 @@ To run a billingCycle, which accummulates usages for a specific time period, run
 
 To specific billing cycle use -DbillingCycle (Default is 7).
 
-* Run a DAY aggregation
+* **Run a DAY aggregation**
 
 To run a DAY aggregation, which sums the usage for a day, run
 
@@ -76,7 +76,7 @@ To view the data using cqlsh, run
 
 	select * from smart_meter_reading_aggregates where meter_id = 1 and aggregatetype ='DAY';
 
-Remove tables and schema  
+* **Remove tables and schema**  
 
 To remove the tables and the schema, run the following.
 
