@@ -1,6 +1,6 @@
 # IoT Cassandra Demo Application  
 
-The explosive number of devices that are generating, tracking, and sharing data across a variety of networks is overwhelming to most data management solutions. Cassandra is a perfect fit for consuming lots of time-series data that comes directly from users, devices, sensors, and similar mechanisms that exist in a variety of geographic locations.
+There are a large number of devices that are generating, tracking, and sharing data across a variety of networks. This can be  overwhelming to most data management solutions. Cassandra is a great fit for consuming lots of time-series data that comes directly from users, devices, sensors, and similar mechanisms that exist in a variety of geographic locations.
 
 This is a small demo to show how to insert meter readings for a smart reader. Note: the readings come in through a file with a number of readings per day.
 
@@ -12,7 +12,7 @@ This is a small demo to show how to insert meter readings for a smart reader. No
 
 * [SchemaSetup.java](/src/main/java/com/datastax/demo/SchemaSetup.java) - Sets up the smart meter reader schema.
 * [Main.java](/src/main/java/com/datastax/smartmeter/Main.java) - Inserts meter reading in table when run.
-* [app.js](/src/main/java/com/datastax/smartmeter/BillingCycleProcessor.java) -  Runs a billingCycle, which accummulates usages for a specific time period
+* [BillingCycleProcessor.java](/src/main/java/com/datastax/smartmeter/BillingCycleProcessor.java) -  Runs a billingCycle, which accummulates usages for a specific time period
 * [Aggregate.java](/src/main/java/com/datastax/smartmeter/Aggregate.java) - Runs an day aggregation, which sums the usage for a day.
 
 ## How this Works
